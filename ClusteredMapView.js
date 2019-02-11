@@ -19,7 +19,7 @@ import {
   regionToBoundingBox,
   itemToGeoJSONFeature
 } from './util'
-import { throttle } from 'lodash';
+import { throttle, debounce } from 'lodash';
 
 export default class ClusteredMapView extends PureComponent {
 
@@ -45,7 +45,12 @@ export default class ClusteredMapView extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.data !== nextProps.data)
-      this.clusterize(nextProps.data)
+      debounce(this._debounceClusterize, 200)
+      //this.clusterize(nextProps.data)
+  }
+
+  _debounceClusterize = () => {
+    this.clusterize(this.props.data)
   }
 
   componentWillUpdate(nextProps, nextState) {
