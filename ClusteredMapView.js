@@ -19,6 +19,7 @@ import {
   regionToBoundingBox,
   itemToGeoJSONFeature
 } from './util'
+import { throttle } from 'lodash';
 
 export default class ClusteredMapView extends PureComponent {
 
@@ -61,7 +62,8 @@ export default class ClusteredMapView extends PureComponent {
   getClusteringEngine = () => this.index
 
   clusterize = (dataset) => {
-    this.index = SuperCluster({ // eslint-disable-line new-cap
+    if (!this.index)
+    this.index = new SuperCluster({ // eslint-disable-line new-cap
       extent: this.props.extent,
       minZoom: this.props.minZoom,
       maxZoom: this.props.maxZoom,
