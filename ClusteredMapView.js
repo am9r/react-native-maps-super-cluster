@@ -45,10 +45,11 @@ export default class ClusteredMapView extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.data !== nextProps.data)
-      debounce(function () {
-          this.clusterize(nextProps.data)
-      }, 500)
+      this._debounceClusterize()
   }
+
+  _debounceClusterize = debounce(function() {
+    this.clusterize(this.props.data)}, 500)
 
   componentWillUpdate(nextProps, nextState) {
     if (!this.isAndroid && this.props.animateClusters && this.clustersChanged(nextState))
@@ -65,7 +66,7 @@ export default class ClusteredMapView extends PureComponent {
 
   clusterize = (dataset) => {
     if (!this.index)
-    this.index = SuperCluster({ // eslint-disable-line new-cap
+    this.index =  SuperCluster({ // eslint-disable-line new-cap
       extent: this.props.extent,
       minZoom: this.props.minZoom,
       maxZoom: this.props.maxZoom,
